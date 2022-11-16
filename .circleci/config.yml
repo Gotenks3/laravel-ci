@@ -39,7 +39,7 @@ jobs:
           paths:
             - node_modules
       - run: npm run dev
-       - run:
+      - run:
           name: Install depencies
           command: |
             sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
