@@ -40,6 +40,11 @@ jobs:
             - node_modules
       - run: npm run dev
       - run:
+          name: Install depencies
+          command: |
+            sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
+            sudo apt-get update --allow-releaseinfo-change
+      - run:
           name: get ready for postgres
           command: |
             sudo apt-get update
@@ -50,7 +55,7 @@ jobs:
           name: php test
           command: vendor/bin/phpunit
 
-  deploy_old:
+  deploy:
     docker:
       - image: circleci/php:7.3-node-browsers
     environment:
@@ -92,18 +97,6 @@ jobs:
             --application-name laravel-ci \
             --deployment-group-name laravel-ci \
             --s3-location bucket=${AWS_S3_BUCKET_NAME},key=laravel-ci.zip,bundleType=zip
-
-  deploy:
-    docker:
-      - image: circleci/php:7.3-node-browsers
-    steps:
-      - checkout
-      - add_ssh_keys
-      - run:
-          name: deploy to prod
-          command: |
-            echo -e "Host git-codecommit.*.amazonaws.com\n   User ${AWS_SSH_KEY_ID}\n   StrictHostKeyChecking no" > ${HOME}/.ssh/config
-            git push ssh://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/laravel-ci
 
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
