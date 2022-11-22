@@ -89,13 +89,13 @@ jobs:
       - aws-cli/install
       - run:
           name: upload artifacts to s3
-          command: aws s3 cp laravel-ci.zip s3://$laravel-ci-codedeploy-ap-northeast-1-gotenks3
+          command: aws s3 cp laravel-ci.zip s3://${AWS_S3_BUCKET_NAME}
           name: deploy to prod
           command: |
             aws deploy create-deployment \
             --application-name laravel-ci \
             --deployment-group-name laravel-ci \
-            --s3-location bucket=$laravel-ci-codedeploy-ap-northeast-1-gotenks3,key=laravel-ci.zip,bundleType=zip
+            --s3-location bucket=${AWS_S3_BUCKET_NAME}
 
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
